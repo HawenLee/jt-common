@@ -18,7 +18,7 @@ public class JedisClusterFactory implements FactoryBean<JedisCluster>{
 	private Resource propertySource;
 	private JedisPoolConfig poolConfig;
 	private String redisNodePrefix;
-	
+
 	
 	public Resource getPropertySource() {
 		return propertySource;
@@ -49,7 +49,7 @@ public class JedisClusterFactory implements FactoryBean<JedisCluster>{
 		//操作properties
 		Properties pro = new Properties();
 		//ip:端口号
-		Set<HostAndPort> nodes = new HashSet<>();
+		Set<HostAndPort> nodes = new HashSet<HostAndPort>();
 		try {
 			pro.load(propertySource.getInputStream());
 			

@@ -4,7 +4,7 @@
 
   <artifactId>jt-common</artifactId>
   <packaging>jar</packaging>
-
+    
   <name>jt-common</name>
   <url>http://maven.apache.org</url>
 
