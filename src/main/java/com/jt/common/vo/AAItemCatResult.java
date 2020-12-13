@@ -5,16 +5,16 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ItemCatResult {
+public class AAItemCatResult {
 
     @JsonProperty("data")	//json序列化时指定字段名称
-    private List<ItemCatData> itemCats = new ArrayList<ItemCatData>();
+    private List<AAItemCatData> itemCats = new ArrayList<AAItemCatData>();
 
-    public List<ItemCatData> getItemCats() {
+    public List<AAItemCatData> getItemCats() {
         return itemCats;
     }
 
-    public void setItemCats(List<ItemCatData> itemCats) {
+    public void setItemCats(List<AAItemCatData> itemCats) {
         this.itemCats = itemCats;
     }
 

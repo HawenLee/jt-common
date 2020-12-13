@@ -9,7 +9,11 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
 public interface SysMapper<T> {
-
+	
+	//该方法是测试方法,不具有通用性
+	@SelectProvider(type=SysMapperProvider.class,method="dynamicSQL")
+	int TextFindCount();
+	
     /**
      * 根据主键ID批量删除
      * 

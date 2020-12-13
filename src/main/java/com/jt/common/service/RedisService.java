@@ -1,65 +1,55 @@
 package com.jt.common.service;
 
+import java.util.concurrent.TimeUnit;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisSentinelPool;
+import redis.clients.jedis.ShardedJedis;
+import redis.clients.jedis.ShardedJedisPool;
 
-@Service
+//@Service
 public class RedisService {
-
-	/*//有的工程需要，有的工程不需要。设置required=false，有就注入，没有就不注入。
-	//这个"required=false" 代表用到的时候才把这个属性添加进去,
-	//不然没有创建ShardsJedisPool时，自动注入不了，服务器就启动报错
-    @Autowired(required = false)
-    private ShardedJedisPool shardedJedisPool;
-    
-    public void set(String key,String value) {
-    	ShardedJedis jedis=shardedJedisPool.getResource();
-    	jedis.set(key, value);
-    	shardedJedisPool.returnResource(jedis);    	
-    }
-    
-    // 添加超时时间
-    public void set(String key,String value,int seconds) {
-    	ShardedJedis jedis=shardedJedisPool.getResource();
-    	jedis.setex(key, seconds, value);
-    	shardedJedisPool.returnResource(jedis);    	
-    }
-    
-    //编辑get方法
-    public String get(String key) {
-    	ShardedJedis jedis=shardedJedisPool.getResource();
-    	String result=jedis.get(key);
-    	shardedJedisPool.returnResource(jedis); 
-    	return result;
-    }*/
-    
-	//引入哨兵的配置
-	@Autowired(required=false)
-	private JedisSentinelPool jedisSentinelPool;
 	
-	public void set(String key,String value) {
-		Jedis jedis = jedisSentinelPool.getResource();
-		jedis.set(key, value);
-		jedisSentinelPool.returnResource(jedis);			
+	//@Autowired
+	private StringRedisTemplate redisTemplate;
+	
+	//获取数据
+	public String get(String key){
+		ValueOperations<String, String>  operations =redisTemplate.opsForValue();
+		return operations.get(key);
 	}
 	
-	public void set(String key,String value,int seconds) {
-		Jedis jedis = jedisSentinelPool.getResource();
-		jedis.setex(key, seconds, value);
-		jedisSentinelPool.returnResource(jedis);			
+	//插入数据	
+	public boolean set(String key,String value){
+		ValueOperations<String, String> operations = redisTemplate.opsForValue();
+		
+		try {
+			operations.set(key, value);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
-	public String get(String key) {
-		Jedis jedis = jedisSentinelPool.getResource();
-		String result = jedis.get(key);
-		jedisSentinelPool.returnResource(jedis);	
-		return result;
+	//插入缓存定义超时时间为秒
+	public boolean set(String key,String value,Long expireTime){
+		try {
+			ValueOperations<String, String> operations = redisTemplate.opsForValue();
+			operations.set(key, value, expireTime, TimeUnit.DAYS);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
-    
-    
-
 }
