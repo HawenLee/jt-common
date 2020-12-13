@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 @Table(name = "tb_user")
 public class User extends BasePojo {
+    //主键自增
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
